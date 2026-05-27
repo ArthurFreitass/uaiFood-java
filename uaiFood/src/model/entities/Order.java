@@ -51,9 +51,13 @@ public class Order {
         }
     }
 
-    // Total
+    public double total() {
+        double sum = 0;
 
-
-
+        for (OrderItem o : itemList) {
+            sum += o.getQuantity() * o.getProduct().getPrice();
+        }
+        return sum;
+    }
 
 }
