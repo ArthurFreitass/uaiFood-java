@@ -10,6 +10,12 @@ public class Client {
     public Client() {
     }
 
+    public Client(String name, String cpf) {
+        setName(name);
+        setCpf(cpf);
+    }
+
+
     public String getName() {
         return name;
     }
@@ -43,6 +49,6 @@ public class Client {
 
     @Override
     public String toString() {
-        return super.toString();
+        return "Nome do cliente: " + name;
     }
 }
