@@ -1,7 +1,9 @@
 package model.entities;
 
+import model.entities.enums.OrderStatus;
 import model.exceptions.DomainException;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class Order {
@@ -10,13 +12,16 @@ public class Order {
 
     private Client client;
     private List<OrderItem> itemList;
+    private OrderStatus status;
 
     public Order() {
     }
 
-    public Order(Integer number, Client client) {
+    public Order(Integer number, Client client, OrderStatus status) {
         setNumber(number);
         this.client = client;
+        this.status = status;
+        itemList = new ArrayList<>();
     }
 
     public int getNumber() {
@@ -25,6 +30,14 @@ public class Order {
 
     public Client getClient() {
         return client;
+    }
+
+    public OrderStatus getStatus() {
+        return status;
+    }
+
+    public void setStatus(OrderStatus status) {
+        this.status = status;
     }
 
     public List<OrderItem> getItemList() {
@@ -58,6 +71,20 @@ public class Order {
             sum += o.getQuantity() * o.getProduct().getPrice();
         }
         return sum;
+    }
+
+    public String generateSummary() {
+        StringBuilder sb = new StringBuilder();
+        sb.append("Order Summary:\n");
+        sb.append("NUMBER: "+ number +"\n");
+        sb.append("ORDER ITEMS: \n");
+
+        for (OrderItem o : itemList) {
+            sb.append(o.getProduct().getName() + " Subtotal $ " + String.format("%.2f", o.subTotal()) + "\n");
+        }
+
+        sb.append("STATUS = " + status);
+        return sb.toString();
     }
 
 }
