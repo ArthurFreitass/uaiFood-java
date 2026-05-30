@@ -5,7 +5,6 @@ import model.exceptions.DomainException;
 import model.util.DateTimeUtil;
 
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -78,17 +77,19 @@ public class Order {
 
     public String generateSummary() {
         StringBuilder sb = new StringBuilder();
-        sb.append("Order Summary:\n");
-        sb.append("NUMBER: "+ number +"\n");
-        sb.append("ORDER ITEMS: \n");
+
+        sb.append("\nSeu pedido foi feito!\n");
+        sb.append("Confira os dados do seu pedido:\n");
+        sb.append("Dados Gerais:\n");
+        sb.append("NÚMERO: "+ number +"\n");
+        sb.append("Items do pedido: \n");
 
         for (OrderItem o : itemList) {
             sb.append(o.getProduct().getName() + " Subtotal $ " + String.format("%.2f", o.subTotal()) + "\n");
         }
 
         sb.append("STATUS = " + status);
-        sb.append("\nHORÁRIO E DATA: [ dia/mês/ano ]"+ LocalDateTime.now().format(DateTimeUtil.fmt()));
+        sb.append("\nHORÁRIO E DATA: [ dia/mês/ano ] "+ LocalDateTime.now().format(DateTimeUtil.fmt()));
         return sb.toString();
     }
-
 }
