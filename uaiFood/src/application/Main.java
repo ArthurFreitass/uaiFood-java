@@ -4,7 +4,9 @@ import model.entities.*;
 import model.entities.enums.OrderStatus;
 import model.exceptions.DomainException;
 import model.service.Menu;
+import model.service.PaymentService;
 import model.util.CheckOrderNumber;
+import model.util.PaymentUtil;
 import model.util.SimpleValidation;
 
 import java.util.ArrayList;
@@ -40,6 +42,8 @@ public class Main {
 
             System.out.print("\nVocê deseja comprar algum item do nosso cardápio? [s/Sim][n/Não]: ");
             char choiceUser = sc.nextLine().charAt(0);
+
+            int numberOrder = (int) (Math.random() * 1000);
 
             boolean isValid = SimpleValidation.checkResponseUserWantOrderItem(choiceUser);
 
@@ -79,17 +83,53 @@ public class Main {
                         }
                     }
 
-                    Order order = new Order((int) (Math.random() * 1000), client, OrderStatus.PENDING);
-                    if (orderItems.size() > 1) {
-                        for (OrderItem o : orderItems) {
-                            order.addItem(o);
-                        }
+                    Order order = new Order(numberOrder, client, OrderStatus.PENDING);
+                    for (OrderItem o : orderItems) {
+                        order.addItem(o);
+                    }
+
+                    System.out.println(order.generateSummary());
+
+                    // Payment
+
+                    System.out.println(PaymentUtil.message());
+
+                    byte choice = sc.nextByte();
+
+                    if (SimpleValidation.checkPaymentChoice(choice)) {
+
+                        System.out.print("Entre com um valor: ");
+                        double amount = sc.nextDouble();
+                        sc.nextLine();
+
+                        PaymentService payService = PaymentUtil.returnPaymentService(choice, amount);
+
+                        order.payment(payService);
+                    }
+
+                } else {
+                    Order order = new Order(numberOrder, client, OrderStatus.PENDING);
+                    for (OrderItem o : orderItems) {
+                        order.addItem(o);
                     }
                     System.out.println(order.generateSummary());
-                } else {
-                    Order order = new Order(101, client, OrderStatus.PENDING);
-                    order.addItem(orderItems.get(0));
-                    System.out.println(order.generateSummary());
+
+                    // Payment
+
+                    System.out.println(PaymentUtil.message());
+
+                    byte choice = sc.nextByte();
+
+                    if (SimpleValidation.checkPaymentChoice(choice)) {
+
+                        System.out.print("\nEntre com um valor: ");
+                        double amount = sc.nextDouble();
+                        sc.nextLine();
+
+                        PaymentService payService = PaymentUtil.returnPaymentService(choice, amount);
+
+                        order.payment(payService);
+                    }
                 }
             } else { // Pedido não feito
                 System.out.println("\nObrigado por utilizar!\n---- SAINDO DO SISTEMA ----");

@@ -2,6 +2,7 @@ package model.entities;
 
 import model.entities.enums.OrderStatus;
 import model.exceptions.DomainException;
+import model.service.PaymentService;
 import model.util.DateTimeUtil;
 
 import java.time.LocalDateTime;
@@ -91,5 +92,12 @@ public class Order {
         sb.append("STATUS = " + status);
         sb.append("\nHORÁRIO E DATA: [ dia/mês/ano ] "+ LocalDateTime.now().format(DateTimeUtil.fmt()));
         return sb.toString();
+    }
+
+    public double payment(PaymentService payService) {
+        double change = payService.processPayment(total());
+        status = OrderStatus.FINISHED;
+        System.out.println("PAGAMENTO ACEITO!");
+        return change;
     }
 }

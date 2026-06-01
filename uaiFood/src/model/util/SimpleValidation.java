@@ -11,4 +11,11 @@ public class SimpleValidation {
         }
         return true;
     }
+
+    public static boolean checkPaymentChoice(byte choice) {
+        if (choice == 1 || choice == 2 || choice == 3) {
+            return true;
+        }
+        throw new DomainException("Error: Invalid choice of payment method!");
+    }
 }
